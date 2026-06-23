@@ -55,8 +55,22 @@ const saveLead = async (outcome: string) => {
   if (error) {
     console.error(error);
   } else {
-    console.log("Lead saved!");
-  }
+  console.log("Lead saved!");
+
+  await fetch("/api/send-email", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      parentName,
+      email: parentEmail,
+      phone: parentPhone,
+      concern: selectedConcern,
+      outcome,
+    }),
+  });
+}
 };
   return (
     <div className="bg-white w-full max-w-2xl rounded-xl shadow-lg border">
