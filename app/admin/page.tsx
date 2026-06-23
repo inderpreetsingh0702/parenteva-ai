@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { createClient } from "@supabase/supabase-js";
 
 const ADMIN_PASSWORD = "parenteva123";
