@@ -24,12 +24,54 @@ useEffect(() => {
 
   fetchLeads();
 }, []);
+const exportCSV = () => {
+  const headers = [
+    "Name",
+    "Email",
+    "Phone",
+    "Age",
+    "Concern",
+    "Outcome",
+    "Recommendation",
+  ];
+
+  const rows = leads.map((lead) => [
+    lead.parent_name,
+    lead.email,
+    lead.phone,
+    lead.child_age,
+    lead.concern,
+    lead.outcome,
+    lead.recommendation,
+  ]);
+
+  const csvContent = [
+    headers.join(","),
+    ...rows.map((row) => row.join(",")),
+  ].join("\n");
+
+  const blob = new Blob([csvContent], {
+    type: "text/csv;charset=utf-8;",
+  });
+
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "parenteva-leads.csv";
+  link.click();
+};
+
 
   return (
     <div className="p-8">
       <h1 className="text-3xl font-bold mb-6">
         Parenteva Leads Dashboard
       </h1>
+      <button
+  onClick={exportCSV}
+  className="mb-4 bg-black text-white px-4 py-2 rounded-lg"
+>
+  Export Leads CSV
+</button>
 
       <div className="overflow-x-auto">
         <table className="w-full border border-gray-200">
