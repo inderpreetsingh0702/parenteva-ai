@@ -1,17 +1,29 @@
+"use client";
 export const dynamic = "force-dynamic";
 import { createClient } from "@supabase/supabase-js";
+import { useEffect, useState } from "react";
 
-const ADMIN_PASSWORD = "parenteva123";
+
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-export default async function AdminPage() {
-  const { data: leads } = await supabase
-    .from("leads")
-    .select("*")
-    .order("id", { ascending: false });
+export default function AdminPage() {
+const [leads, setLeads] = useState<any[]>([]);
+
+useEffect(() => {
+  const fetchLeads = async () => {
+    const { data } = await supabase
+      .from("leads")
+      .select("*")
+      .order("id", { ascending: false });
+
+    setLeads(data || []);
+  };
+
+  fetchLeads();
+}, []);
 
   return (
     <div className="p-8">
