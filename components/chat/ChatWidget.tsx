@@ -45,6 +45,7 @@ const saveLead = async (outcome: string) => {
         concern: selectedConcern,
         outcome,
         recommendation: recommendationTitle,
+        source: "Website Chatbot",
       },
     ])
     .select();

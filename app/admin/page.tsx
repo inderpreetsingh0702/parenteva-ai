@@ -158,6 +158,7 @@ if (!authenticated) {
               <th className="p-3 border">Name</th>
               <th className="p-3 border">Email</th>
               <th className="p-3 border">Phone</th>
+              <th className="p-3 border">Source</th>
               <th className="p-3 border">Age</th>
               <th className="p-3 border">Concern</th>
               <th className="p-3 border">Outcome</th>
@@ -172,6 +173,7 @@ if (!authenticated) {
                 <td className="p-3 border">{lead.parent_name}</td>
                 <td className="p-3 border">{lead.email}</td>
                 <td className="p-3 border">{lead.phone}</td>
+                <td className="p-3 border">{lead.source}</td>
                 <td className="p-3 border">{lead.child_age}</td>
                 <td className="p-3 border">{lead.concern}</td>
                 <td className="p-3 border">{lead.outcome}</td>
