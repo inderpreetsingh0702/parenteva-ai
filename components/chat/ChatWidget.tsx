@@ -46,6 +46,7 @@ const saveLead = async (outcome: string) => {
         outcome,
         recommendation: recommendationTitle,
         source: "Website Chatbot",
+        status: "New",
       },
     ])
     .select();

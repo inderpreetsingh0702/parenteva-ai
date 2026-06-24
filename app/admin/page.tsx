@@ -159,6 +159,7 @@ if (!authenticated) {
               <th className="p-3 border">Email</th>
               <th className="p-3 border">Phone</th>
               <th className="p-3 border">Source</th>
+              <th className="p-3 border">Status</th>
               <th className="p-3 border">Age</th>
               <th className="p-3 border">Concern</th>
               <th className="p-3 border">Outcome</th>
@@ -174,6 +175,34 @@ if (!authenticated) {
                 <td className="p-3 border">{lead.email}</td>
                 <td className="p-3 border">{lead.phone}</td>
                 <td className="p-3 border">{lead.source}</td>
+                <td className="p-3 border">
+  <select
+    value={lead.status || "New"}
+    onChange={async (e) => {
+      const newStatus = e.target.value;
+
+      await supabase
+        .from("leads")
+        .update({ status: newStatus })
+        .eq("id", lead.id);
+
+      setLeads((prev) =>
+        prev.map((item) =>
+          item.id === lead.id
+            ? { ...item, status: newStatus }
+            : item
+        )
+      );
+    }}
+    className="border rounded px-2 py-1"
+  >
+    <option value="New">New</option>
+    <option value="Contacted">Contacted</option>
+    <option value="Qualified">Qualified</option>
+    <option value="Converted">Converted</option>
+    <option value="Lost">Lost</option>
+  </select>
+</td>
                 <td className="p-3 border">{lead.child_age}</td>
                 <td className="p-3 border">{lead.concern}</td>
                 <td className="p-3 border">{lead.outcome}</td>
