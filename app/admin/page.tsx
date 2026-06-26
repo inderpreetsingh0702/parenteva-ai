@@ -15,7 +15,29 @@ export default function AdminPage() {
   const [password, setPassword] = useState("");
 const [authenticated, setAuthenticated] = useState(false);
 const [leads, setLeads] = useState<any[]>([]);
+const [statusFilter, setStatusFilter] = useState("All");
 const totalLeads = leads.length;
+const newLeads = leads.filter(
+  (lead) => lead.status === "New"
+).length;
+
+const contactedLeads = leads.filter(
+  (lead) => lead.status === "Contacted"
+).length;
+
+const qualifiedLeads = leads.filter(
+  (lead) => lead.status === "Qualified"
+).length;
+
+const convertedLeads = leads.filter(
+  (lead) => lead.status === "Converted"
+).length;
+const filteredLeads =
+  statusFilter === "All"
+    ? leads
+    : leads.filter(
+        (lead) => lead.status === statusFilter
+      );
 
 const careerLeads = leads.filter(
   (lead) => lead.concern === "Career Confusion"
@@ -116,34 +138,51 @@ if (!authenticated) {
   return (
     
     <div className="p-8">
-      <div className="grid grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-5 gap-4 mb-6">
   <div className="border rounded-xl p-4">
     <p className="text-sm text-gray-500">Total Leads</p>
     <p className="text-3xl font-bold">{totalLeads}</p>
   </div>
 
   <div className="border rounded-xl p-4">
-    <p className="text-sm text-gray-500">Career Leads</p>
-    <p className="text-3xl font-bold">{careerLeads}</p>
+    <p className="text-sm text-gray-500">New</p>
+    <p className="text-3xl font-bold">{newLeads}</p>
   </div>
 
   <div className="border rounded-xl p-4">
-    <p className="text-sm text-gray-500">Study Abroad Leads</p>
-    <p className="text-3xl font-bold">{studyAbroadLeads}</p>
+    <p className="text-sm text-gray-500">Contacted</p>
+    <p className="text-3xl font-bold">{contactedLeads}</p>
   </div>
-</div>
-<div className="border rounded-xl p-4">
-  <p className="text-sm text-gray-500">Academic Leads</p>
-  <p className="text-3xl font-bold">{academicLeads}</p>
-</div>
 
-<div className="border rounded-xl p-4">
-  <p className="text-sm text-gray-500">Confidence Leads</p>
-  <p className="text-3xl font-bold">{confidenceLeads}</p>
+  <div className="border rounded-xl p-4">
+    <p className="text-sm text-gray-500">Qualified</p>
+    <p className="text-3xl font-bold">{qualifiedLeads}</p>
+  </div>
+
+  <div className="border rounded-xl p-4">
+    <p className="text-sm text-gray-500">Converted</p>
+    <p className="text-3xl font-bold">{convertedLeads}</p>
+  </div>
 </div>
       <h1 className="text-3xl font-bold mb-6">
         Parenteva Leads Dashboard
       </h1>
+      <div className="mb-4">
+  <select
+    value={statusFilter}
+    onChange={(e) =>
+      setStatusFilter(e.target.value)
+    }
+    className="border rounded-lg px-4 py-2"
+  >
+    <option value="All">All Leads</option>
+    <option value="New">New</option>
+    <option value="Contacted">Contacted</option>
+    <option value="Qualified">Qualified</option>
+    <option value="Converted">Converted</option>
+    <option value="Lost">Lost</option>
+  </select>
+</div>
       <button
   onClick={exportCSV}
   className="mb-4 bg-black text-white px-4 py-2 rounded-lg"
@@ -160,22 +199,25 @@ if (!authenticated) {
               <th className="p-3 border">Phone</th>
               <th className="p-3 border">Source</th>
               <th className="p-3 border">Status</th>
+              <th className="p-3 border">Notes</th>
               <th className="p-3 border">Age</th>
               <th className="p-3 border">Concern</th>
               <th className="p-3 border">Outcome</th>
               <th className="p-3 border">Recommendation</th>
               <th className="p-3 border">Created</th>
+              <th className="p-3 border">Actions</th>
             </tr>
           </thead>
 
           <tbody>
-            {leads?.map((lead) => (
+            {filteredLeads?.map((lead) => (
               <tr key={lead.id}>
                 <td className="p-3 border">{lead.parent_name}</td>
                 <td className="p-3 border">{lead.email}</td>
                 <td className="p-3 border">{lead.phone}</td>
                 <td className="p-3 border">{lead.source}</td>
-                <td className="p-3 border">
+
+<td className="p-3 border">
   <select
     value={lead.status || "New"}
     onChange={async (e) => {
@@ -203,12 +245,60 @@ if (!authenticated) {
     <option value="Lost">Lost</option>
   </select>
 </td>
-                <td className="p-3 border">{lead.child_age}</td>
-                <td className="p-3 border">{lead.concern}</td>
-                <td className="p-3 border">{lead.outcome}</td>
-                <td className="p-3 border">{lead.recommendation}</td>
+
+<td className="p-3 border">
+  <textarea
+    value={lead.notes || ""}
+    onBlur={async (e) => {
+      const newNotes = e.target.value;
+
+      await supabase
+        .from("leads")
+        .update({ notes: newNotes })
+        .eq("id", lead.id);
+
+      setLeads((prev) =>
+        prev.map((item) =>
+          item.id === lead.id
+            ? { ...item, notes: newNotes }
+            : item
+        )
+      );
+    }}
+    className="border rounded p-2 w-64"
+    rows={2}
+    placeholder="Add notes..."
+  />
+</td>
+
+<td className="p-3 border">{lead.child_age}</td>
+<td className="p-3 border">{lead.concern}</td>
+<td className="p-3 border">{lead.outcome}</td>
+<td className="p-3 border">{lead.recommendation}</td>
                 <td className="p-3 border">
   {new Date(lead.created_at).toLocaleString()}
+</td>
+<td className="p-3 border">
+  <a
+    href={`https://wa.me/${lead.phone}?text=${encodeURIComponent(
+      `Hi ${lead.parent_name},
+
+Thank you for contacting Parenteva.
+
+I reviewed your inquiry regarding ${lead.concern}.
+
+How can I help you further?
+
+Regards,
+Inderpreet
+Parenteva`
+    )}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="bg-green-600 text-white px-3 py-2 rounded-lg text-sm"
+  >
+    WhatsApp
+  </a>
 </td>
               </tr>
             ))}

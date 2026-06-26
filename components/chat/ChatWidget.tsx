@@ -321,48 +321,115 @@ const saveLead = async (outcome: string) => {
             <h3 className="font-bold text-lg">
               Recommended Plan
             </h3>
+            
 
             <p className="font-medium">
   {recommendationTitle}
 </p>
 
+            
             <p className="text-sm text-gray-700">
               {recommendationReason}
             </p>
+            
 
             {selectedOutcome === "Career Clarity" && (
-              <a
-                href="https://parenteva.com/career-counselling-plan/"
-                target="_blank"
-                className="inline-block bg-black text-white px-4 py-2 rounded-lg"
-              >
-                Start Career Counselling
-              </a>
-            )}
+              
+  <>
+    <a
+      href="https://parenteva.com/career-counselling-plan/"
+      target="_blank"
+      className="inline-block bg-black text-white px-4 py-2 rounded-lg"
+    >
+      Start Career Counselling
+    </a>
 
-            {(selectedOutcome === "Better Academic Performance" ||
-              selectedOutcome === "Confidence Building") && (
-              <a
-                href="https://parenteva.com/general-psyhcometric-assessment/"
-                target="_blank"
-                className="inline-block bg-black text-white px-4 py-2 rounded-lg"
-              >
-                Take Assessment
-              </a>
-            )}
+    <div className="mt-3">
+      <a
+        href={`https://wa.me/917508216777?text=${encodeURIComponent(
+          `Hi,
 
-            {selectedOutcome === "Study Abroad Guidance" && (
-              <a
-                href="https://parenteva.com/our-experts/"
-                target="_blank"
-                className="inline-block bg-black text-white px-4 py-2 rounded-lg"
-              >
-                Book Expert
-              </a>
-            )}
+I'd like to know more about the ${recommendationTitle}.
+
+Could you explain what's included, the pricing, and how it can help my child?
+
+Thank you.`
+        )}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-block bg-green-600 text-white px-4 py-2 rounded-lg"
+      >
+        Ask About This Plan
+      </a>
+    </div>
+  </>
+)}
+
+{(selectedOutcome === "Better Academic Performance" ||
+  selectedOutcome === "Confidence Building") && (
+  <>
+    <a
+      href="https://parenteva.com/general-psyhcometric-assessment/"
+      target="_blank"
+      className="inline-block bg-black text-white px-4 py-2 rounded-lg"
+    >
+      Take Assessment
+    </a>
+
+    <div className="mt-3">
+      <a
+        href={`https://wa.me/917508216777?text=${encodeURIComponent(
+          `Hi,
+
+I'd like to know more about the General Psychometric Assessment.
+
+Could you explain what areas are assessed and what kind of report I will receive?
+
+Thank you.`
+        )}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-block bg-green-600 text-white px-4 py-2 rounded-lg"
+      >
+        Ask About This Plan
+      </a>
+    </div>
+  </>
+)}
+
+{selectedOutcome === "Study Abroad Guidance" && (
+  <>
+    <a
+      href="https://parenteva.com/our-experts/"
+      target="_blank"
+      className="inline-block bg-black text-white px-4 py-2 rounded-lg"
+    >
+      Book Expert
+    </a>
+
+    <div className="mt-3">
+      <a
+        href={`https://wa.me/917508216777?text=${encodeURIComponent(
+          `Hi,
+
+I came across the Expert Consultation recommendation and would like to know more.
+
+Could you please explain how the process works and what kind of guidance and support I can expect for my child?
+
+Thank you.`
+        )}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-block bg-green-600 text-white px-4 py-2 rounded-lg"
+      >
+        Ask About This Plan
+      </a>
+    </div>
+  </>
+
+)}
           </div>
         )}
-
       </div>
     </div>
   );
